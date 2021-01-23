@@ -2,6 +2,9 @@ var Pawn = require('./core/pieces/Pawn')
 var Rook = require('./core/pieces/Rook')
 var Knight = require('./core/pieces/Knight')
 var Bishop = require('./core/pieces/Bishop')
+var King = require('./core/pieces/King')
+var Queen = require('./core/pieces/Queen')
+
 class Game {
 
     constructor(id, player = null){
@@ -32,16 +35,16 @@ class Game {
                 if(y == 0 && (x == 0 || x == 7)) this.board[x][y] = new Rook(id, "Tour", "white_t.png", x, y, this.current_player);
                 if(y == 0 && (x == 1 || x == 6)) this.board[x][y] = new Knight(id, "Cavalier", "white_c.png", x, y, this.current_player);
                 if(y == 0 && (x == 2 || x == 5)) this.board[x][y] = new Bishop(id, "Fou", "white_f.png", x, y, this.current_player);
-                if(y == 0 && x == 3) this.board[x][y] = new Pawn(id, "Dame", "white_d.png", x, y, this.current_player);
-                if(y == 0 && x == 4) this.board[x][y] = new Pawn(id, "Roi", "white_r.png", x, y, this.current_player);
+                if(y == 0 && x == 3) this.board[x][y] = new Queen(id, "Dame", "white_d.png", x, y, this.current_player);
+                if(y == 0 && x == 4) this.board[x][y] = new King(id, "Roi", "white_r.png", x, y, this.current_player);
 
                 // black
                 if(y == 6) this.board[x][y] = new Pawn(id, "Pion", "black_p.png", x, y, this.listPlayers[1]);
                 if(y == 7 && (x == 0 || x == 7)) this.board[x][y] = new Rook(id, "Tour", "black_t.png", x, y, this.listPlayers[1]);
                 if(y == 7 && (x == 1 || x == 6)) this.board[x][y] = new Knight(id, "Cavalier", "black_c.png", x, y, this.listPlayers[1]);
                 if(y == 7 && (x == 2 || x == 5)) this.board[x][y] = new Bishop(id, "Fou", "black_f.png", x, y, this.listPlayers[1]);
-                if(y == 7 && x == 3) this.board[x][y] = new Pawn(id, "Dame", "black_d.png", x, y, this.listPlayers[1]);
-                if(y == 7 && x == 4) this.board[x][y] = new Pawn(id, "Roi", "black_r.png", x, y, this.listPlayers[1]);
+                if(y == 7 && x == 3) this.board[x][y] = new Queen(id, "Dame", "black_d.png", x, y, this.listPlayers[1]);
+                if(y == 7 && x == 4) this.board[x][y] = new King(id, "Roi", "black_r.png", x, y, this.listPlayers[1]);
             }
         }
     }
@@ -89,12 +92,29 @@ class Game {
                 this.board[snc[1]][snc[2]] = c;
                 this.board[sc[1]][sc[2]] = null;
 
+                if(this.isFailure()){
+                    console.log('Echecs !')
+                }
                 this._turn();
                 
                 return callback(true, "p-" + pid, next_case);
             }
         }
         return callback(false);
+    }
+
+    isFailure(){
+        var king = null;
+        for (let i = 0; i < this.board.length - 1; i++) {
+            for (let j = 0; j < this.board.length - 1; j++) {
+                if(this.board[i][j] instanceof King){
+                    king = this.board[i][j];
+                }
+            }
+        }
+        console.log(king);
+        if(king == null) return false
+        return king.isFailure(this.board);
     }
 
 }

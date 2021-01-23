@@ -21,7 +21,6 @@ function click(target) {
         // remove color
         firstcase.classList.remove("selected");
         if(a_case[0] != 'c') a_case = target.parentElement.id;
-        console.log(firstcase);
         socket.emit('play', firstcase.id, a_case);
         firstcase = null;
     }
@@ -33,11 +32,11 @@ function click(target) {
     }
 }
 
-function mouseover(target){
+/*function mouseover(target){
     if(overcase) overcase.classList.remove("over");
     target.classList.add('over')
     overcase = target
-}
+}*/
 
 function drag(ev) {
     e_drag = ev.target;
@@ -103,7 +102,7 @@ function inBoard(board, user, y, x){
         new_case.appendChild(piece);
     }
     new_case.onclick = function() { click(this); };
-    new_case.onmouseover = function() { mouseover(this); };
+    //new_case.onmouseover = function() { mouseover(this); };
     new_case.className = 'case ' + color;
     chessboard.appendChild(new_case);
 }

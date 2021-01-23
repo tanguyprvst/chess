@@ -1,5 +1,8 @@
 $(function () {
 
+    var played_case_1 = null;
+    var played_case_2 = null;
+
     $('#create_game').submit(function(e) {
       e.preventDefault(); // prevents page reloading
       socket.emit('create_game', $('#username').val());
@@ -34,11 +37,24 @@ $(function () {
     });
 
     socket.on('play', function(c, nc){
-      var c = $("#" + c);
 
-      var pnc = $("#" + nc).children();
+      if(played_case_1 != null){
+        played_case_1.removeClass('played_1');
+        played_case_2.removeClass('played_2');
+      }
+      
+      var c = $("#" + c);
+      var c_nc = $("#" + nc);
+      var c_c = c.parent();
+
+      var pnc = c_nc.children();
       pnc.remove();
 
-      $("#" + nc).prepend(c)
+      c_nc.prepend(c)
+
+      played_case_1 = c_c;
+      played_case_2 = c_nc;
+      c_c.addClass('played_1');
+      c_nc.addClass('played_2');
     });
 });

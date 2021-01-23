@@ -8,31 +8,14 @@ class Rook extends Piece {
     }
 
     canMove(final_x, final_y, board){
-        var nc = board[final_x][final_y];
-
         // regarde si il bouge en horizontal ou vertical
-        if(final_x == this.x) return this.check(this.y, final_y, false, board);
-        if(final_y == this.y) return this.check(this.x, final_x, true, board);
+        console.log("x: " + this.x + " - y: " + this.y + " - final_x: " + final_x + " - final_y: " + final_y);
+        if(final_x * 1 == this.x * 1) return this.lineCheck(this.y, final_y, false, board, final_x, final_y);
+        if(final_y * 1 == this.y * 1) return this.lineCheck(this.x, final_x, true, board, final_x, final_y);
+
+        return false
     };
-    
-    check(actual, final, honrizontal, board){
-        if(final > actual){
-            for(let i = actual * 1 + 1; i < final; i++){
-                if(!honrizontal && board[this.x][i] != null) return false;
-                if(honrizontal && board[i][this.y] != null) return false;
-            }
-        }
-        for(let i = actual - 1; i > final; i--){
-            if(!honrizontal && board[this.x][i] != null) return false;
-            if(honrizontal && board[i][this.y] != null) return false;
-        }
 
-        if(honrizontal) this.x = final;
-        if(!honrizontal) this.y = final;
-
-        if(!this.move) this.move = true;
-        return true;
-    }
 }
 
 module.exports = Rook;
