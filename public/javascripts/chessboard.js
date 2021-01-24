@@ -91,10 +91,9 @@ function inBoard(board, user, y, x){
     if(board[y][x] != null){
         var piece = document.createElement('img');
         var piece_id = "p-" + board[y][x].id;
-        piece.src = local + 'images/' + board[y][x].image; 
+        piece.src = local + 'images/hd/' + board[y][x].image; 
         piece.id = piece_id;
-        piece.style.height = "80px";
-        piece.style.width = "80px";
+        piece.className = 'piece';
         if(user.id == board[y][x].player.id){
             piece.draggable = true;
             piece.addEventListener("dragstart" ,drag);

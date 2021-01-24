@@ -5,8 +5,11 @@ $(function () {
 
     $('#create_game').submit(function(e) {
       e.preventDefault(); // prevents page reloading
-      socket.emit('create_game', $('#username').val());
-      return false;
+      code = $('#code').val()
+      if(code != ""){
+        return socket.emit('join_game', $('#username').val(), $('#code').val());
+      }
+      return socket.emit('create_game', $('#username').val());
     });
 
     $('#play').submit(function(e) {
@@ -15,11 +18,11 @@ $(function () {
         return false;
       });
 
-    $('#join_game').submit(function(e) {
+    /*$('#join_game').submit(function(e) {
         e.preventDefault(); // prevents page reloading
-        socket.emit('join_game', $('#username').val(), $('#code').val());
+        
         return false;
-    });
+    });*/
 
     $('#send_message').submit(function(e) {
         e.preventDefault(); // prevents page reloading
@@ -27,12 +30,27 @@ $(function () {
         return false;
     });
 
-    socket.on('create_game', function(game){
-        $('#codes').append($('<li>').text('code: ' + game.code));
+    $("#code").on('input', function() {
+      console.log('change')
+      if($("#code").val() != ""){
+        console.log($("#create_game"))
+        $("#create_game_button").val("Join a game");
+      }else{
+        $("#create_game_button").val("Create a game");
+      }
+      
+    });
+
+    socket.on('create_game', function(username, game){
+      $('#username').val(username);
+      $('#code').val(game.code);
+      $('#create_game_button').remove();
     });
 
     socket.on('join_game', function(game, user){
       $('#join').append($('<li>').text('game n' + game.id + ', Players: ' + game.listPlayers[0].name + " & " + game.listPlayers[1].name));
+      $("#chessboard").css("display", "block");
+      $('#create_game').remove();
       generateChessboard(game.board, user);
     });
 
@@ -42,6 +60,9 @@ $(function () {
         played_case_1.removeClass('played_1');
         played_case_2.removeClass('played_2');
       }
+
+      var audio = new Audio('music/SON.mp3');
+      audio.play();
       
       var c = $("#" + c);
       var c_nc = $("#" + nc);

@@ -1,6 +1,4 @@
 let socket_io = require('socket.io');
-var cookie = require('cookie');
-
 const Game = require('./models/Game');
 const Palyer = require('./models/core/Player');
 
@@ -36,14 +34,15 @@ io.on('connection', function(socket){
         return io.to(socket.id).emit("create_game", 'Error');
       }
       // set username
-      connectedUsers[socket.id]['player'].name = username;
+      if(username != "") connectedUsers[socket.id]['player'].name = username;
+      
       // new game
       var game = new Game(games.length, connectedUsers[socket.id]['player']);
       connectedUsers[socket.id]['game'] = game.id;
       socket.join(game.id);
       games.push(game)
       // socket
-      io.to(socket.id).emit("create_game", game);
+      io.to(socket.id).emit("create_game", connectedUsers[socket.id]['player'].name, game);
     }
 
     function join_game(username, code){

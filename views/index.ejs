@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title
+  form(id='create_game')
+    input(type='text', id='username', value="Player 1", name='username')
+    button(type='submit' class='btn') Créer une partie
+
+  form(id='join_game')
+    input(type='text', id='code' name='code')
+    button(type='submit' class='btn') Rejoindre une partie
+
+  h3 Code:
+    ul(id='codes')
+
+  h3 Partie:
+    ul(id='join')
+
+  h3 Jeu:
+  <div id="chessboard" class="chessboard">
+    
+  </div>

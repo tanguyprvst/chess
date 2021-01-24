@@ -76,10 +76,7 @@ class Game {
         let snc = next_case.split('-');
         let c = this.board[sc[1]][sc[2]];
         let nc = this.board[snc[1]][snc[2]];
-
-        //console.log(c);
-        //console.log(nc);
-
+        
         let pid = c.id;
 
         if(c.player.id == this.current_player.id && auth_player_id == this.current_player.id && c != nc){
