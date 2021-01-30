@@ -12,16 +12,16 @@ class King extends Piece {
     canMove(final_x, final_y, board){
 
         // vertical / honrizontal
-        if((this.x * 1) + 1 == final_x && this.y == final_y) return this.save(final_x, final_y);
-        if((this.x * 1) - 1 == final_x && this.y == final_y) return this.save(final_x, final_y);
-        if(this.x == final_x && (this.y * 1) + 1 == final_y) return this.save(final_x, final_y);
-        if(this.x == final_x && (this.y * 1) - 1 == final_y) return this.save(final_x, final_y);
+        if((this.x * 1) + 1 == final_x && this.y == final_y) return true;
+        if((this.x * 1) - 1 == final_x && this.y == final_y) return true;
+        if(this.x == final_x && (this.y * 1) + 1 == final_y) return true;
+        if(this.x == final_x && (this.y * 1) - 1 == final_y) return true;
 
         // diagonal
-        if((this.x * 1) + 1 == final_x && (this.y * 1) + 1 == final_y) return this.save(final_x, final_y);
-        if((this.x * 1) + 1 == final_x && (this.y * 1) - 1 == final_y) return this.save(final_x, final_y);
-        if((this.x * 1) - 1 == final_x && (this.y * 1) + 1 == final_y) return this.save(final_x, final_y);
-        if((this.x * 1) - 1 == final_x && (this.y * 1) - 1 == final_y) return this.save(final_x, final_y);
+        if((this.x * 1) + 1 == final_x && (this.y * 1) + 1 == final_y) return true;
+        if((this.x * 1) + 1 == final_x && (this.y * 1) - 1 == final_y) return true;
+        if((this.x * 1) - 1 == final_x && (this.y * 1) + 1 == final_y) return true;
+        if((this.x * 1) - 1 == final_x && (this.y * 1) - 1 == final_y) return true;
         
         return false
     };
@@ -38,16 +38,15 @@ class King extends Piece {
     checkDiagonal(x, y, board){
         let l = this.y * 1 + y;
         for(let k = this.x * 1 + x; (k <= 0 || k >= 0); k += x){
-            console.log(board[k][l]);
-            console.log('x: ' + k + " - y: " + l)
-            if(board[k][l] != null) if(this.checkDiagonalPiece(board[k][l])) return true;
-            if(k <= 0 || l <= 0 || k == 7 || l == 7) return false;
+            if(board[k][l] != null) return this.checkDiagonalPiece(board[k][l]) ? true : false;
+            if(k == 0 || l == 0 || k == 7 || l == 7) return false;
             l += y;
         }
     }
 
     checkDiagonalPiece(p){
-        if(p.player != this.player){
+        if(p.player.id == this.player.id) return false;
+        if(p.player.id != this.player.id){
             if(p instanceof Queen || p instanceof Bishop) return true;
         }
         return false;

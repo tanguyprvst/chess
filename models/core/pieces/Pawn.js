@@ -15,8 +15,6 @@ class Pawn extends Piece {
             var y = this.player.color == "white" ? (parseInt(this.y, 10) + 1) : (this.y -1);
             if(final_y == y && (final_x == parseInt(this.x, 10) + 1 || final_x == this.x - 1)){
                 if(this.first) this.first = false;
-                this.y = final_y;
-                this.x = final_x;
                 return true;
             }
             return false
@@ -27,7 +25,6 @@ class Pawn extends Piece {
             var y = this.player.color == "white" ? (parseInt(this.y, 10) + 2) : (this.y - 2);
             if(final_y == y && final_x == this.x){
                 this.first = false;
-                this.y = final_y;
                 return true;
             }
         }
@@ -36,7 +33,6 @@ class Pawn extends Piece {
         var y = this.player.color == "white" ? (parseInt(this.y, 10) + 1) : (this.y - 1);
         if(final_y == y && final_x == this.x){
             if(this.first) this.first = false;
-            this.y = final_y;
             return true;
         }
         

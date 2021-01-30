@@ -10,9 +10,7 @@ class Bishop extends Piece {
 
         if(final_y == this.y || final_x == this.x) return false;
 
-        var result = this.diagonalCheck(final_x, final_y, board);
-        if(result) this.save(final_x, final_y);
-        return result;
+        return this.diagonalCheck(final_x, final_y, board);
     };
 
     

@@ -16,7 +16,10 @@ class Game {
 
         this.winner = null;
         this.turn = 0;
+
         this.current_player = null;
+        this.second_player = null;
+
         this.listPlayers.push(player);
         
     }
@@ -69,6 +72,7 @@ class Game {
     _turn(){
         this.turn++;
         this.current_player = this.listPlayers[this.turn%2];
+        this.second_player = this.listPlayers[this.turn%2];
     }
 
     play(played_case, next_case, auth_player_id, callback){
@@ -82,34 +86,47 @@ class Game {
         if(c.player.id == this.current_player.id && auth_player_id == this.current_player.id && c != nc){
             if(nc != null && nc.player.id == c.player.id) return callback(false);
 
+            var base_x = sc[1];
+            var base_y = sc[2];
+
             var move_x = snc[1];
             var move_y = snc[2];
 
             if(c.canMove(move_x, move_y, this.board)){
-                this.board[snc[1]][snc[2]] = c;
-                this.board[sc[1]][sc[2]] = null;
 
-                if(this.isFailure()){
-                    console.log('Echecs !')
+                // move
+                this.board[move_x][move_y] = c;
+                this.board[base_x][base_y] = null;
+                c.save(move_x, move_y)
+
+                if(this.isFailure(this.current_player)){
+                    // remove
+                    this.board[move_x][move_y] = null;
+                    this.board[base_x][base_y] = c;
+                    c.save(base_x, base_y)
+                    return callback(false);
                 }
-                this._turn();
                 
+                // save and move piece
+                c.save(move_x, move_y)
+                this.board[move_x][move_y] = c;
+                this.board[base_x][base_y] = null;
+                this._turn();
+
                 return callback(true, "p-" + pid, next_case);
             }
         }
-        return callback(false);
     }
 
-    isFailure(){
+    isFailure(player){
         var king = null;
-        for (let i = 0; i < this.board.length - 1; i++) {
-            for (let j = 0; j < this.board.length - 1; j++) {
-                if(this.board[i][j] instanceof King){
+        for (let i = 0; i < this.board.length; i++) {
+            for (let j = 0; j < this.board.length; j++) {
+                if(this.board[i][j] instanceof King && player.id == this.board[i][j].player.id ){
                     king = this.board[i][j];
                 }
             }
         }
-        console.log(king);
         if(king == null) return false
         return king.isFailure(this.board);
     }
